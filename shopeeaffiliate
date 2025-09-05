@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rekomendasi Produk Shopee — Affiliate</title>
+  <meta name="description" content="Katalog rekomendasi produk Shopee. Klik tombol untuk cek di Shopee melalui link affiliate." />
+  <meta property="og:title" content="Rekomendasi Produk Shopee" />
+  <meta property="og:description" content="Produk pilihan terbaik, langsung ke Shopee melalui link affiliate." />
+  <meta property="og:type" content="website" />
+  <!-- Ganti URL gambar OG jika perlu -->
+  <meta property="og:image" content="https://via.placeholder.com/1200x630?text=Shopee+Affiliate" />
+  <style>
+    :root{
+      --bg:#0f1115;              /* latar gelap modern */
+      --card:#151923;            /* kartu */
+      --muted:#aab2c0;           /* teks sekunder */
+      --text:#e7ecf3;            /* teks utama */
+      --brand:#ee4d2d;           /* oranye Shopee-ish */
+      --brand-700:#d94424;
+      --ring: rgba(238,77,45,.35);
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;height:100%}
+    body{
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, 'Helvetica Neue', Arial;
+      background: radial-gradient(1200px 1200px at 20% -10%, #1a1f2b 0, transparent 60%),
+                  radial-gradient(1000px 800px at 120% 0%, #1a1f2b 0, transparent 40%),
+                  var(--bg);
+      color:var(--text);
+      line-height:1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    header{
+      position:sticky; top:0; z-index:30;
+      background:rgba(15,17,21,.7); backdrop-filter:saturate(180%) blur(12px);
+      border-bottom:1px solid rgba(255,255,255,.05);
+    }
+    .wrap{max-width:1040px;margin:0 auto;padding:18px 20px}
+    .hero{display:flex;align-items:center;gap:16px}
+    .logo{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,var(--brand),#ff8a65); display:grid;place-items:center; font-weight:800}
+    .logo span{color:white}
+    .title{margin:0;font-size:20px;font-weight:800}
+    .subtitle{margin:0;color:var(--muted);font-size:13px}
+
+    .controls{display:grid; grid-template-columns:1.2fr 1fr 1fr auto; gap:10px; margin-top:14px}
+    .input, .select, .button{
+      width:100%; padding:12px 12px; border-radius:12px; border:1px solid rgba(255,255,255,.08);
+      background:#0d1016; color:var(--text); outline:none; transition:.2s border, .2s box-shadow;
+    }
+    .input:focus, .select:focus{border-color:var(--brand); box-shadow:0 0 0 6px var(--ring)}
+    .button{background:var(--brand); border:none; font-weight:700; cursor:pointer}
+    .button:hover{background:var(--brand-700)}
+
+    main .wrap{padding-top:22px}
+
+    .grid{display:grid; grid-template-columns: repeat( auto-fill, minmax(220px, 1fr) ); gap:16px}
+    .card{background:var(--card); border:1px solid rgba(255,255,255,.06); border-radius:18px; overflow:hidden; display:flex; flex-direction:column}
+    .thumb{aspect-ratio:1/1; width:100%; object-fit:cover; background:#0b0e13}
+    .pad{padding:12px 14px 16px}
+    .name{margin:6px 0 2px; font-weight:700; font-size:15px}
+    .desc{margin:0; color:var(--muted); font-size:13px; height:38px; overflow:hidden}
+    .meta{display:flex; align-items:center; justify-content:space-between; gap:6px; margin:10px 0 8px}
+    .price{font-size:16px; font-weight:800}
+    .badge{font-size:12px; color:#ffd699}
+    .cta{display:flex; gap:8px}
+    .cta a, .cta button{flex:1; text-align:center; padding:10px 12px; border-radius:12px; border:1px solid rgba(255,255,255,.08); color:white; text-decoration:none; background:#0d1016}
+    .cta a.primary{background:var(--brand); border:none; font-weight:800}
+    .cta a.primary:hover{background:var(--brand-700)}
+    .cta button{cursor:pointer}
+
+    footer{margin:38px 0 24px; color:var(--muted); font-size:12px}
+
+    @media (max-width: 780px){
+      .controls{grid-template-columns:1fr 1fr; grid-auto-rows:auto}
+      .hide-sm{display:none}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="hero">
+        <div class="logo" aria-hidden="true"><span>RA</span></div>
+        <div>
+          <h1 class="title">Rekomendasi Produk Shopee</h1>
+          <p class="subtitle">Kurasi barang pilihan • Klik & beli lewat Shopee</p>
+        </div>
+      </div>
+
+      <!-- Controls: cari, kategori, urut, reset -->
+      <div class="controls" role="region" aria-label="Filter & Pencarian">
+        <input class="input" id="q" type="search" placeholder="Cari produk (misal: tripod, skincare, kaos)" aria-label="Cari produk" />
+        <select class="select" id="cat" aria-label="Filter kategori">
+          <option value="">Semua Kategori</option>
+        </select>
+        <select class="select" id="sort" aria-label="Urutkan">
+          <option value="popular">Paling populer</option>
+          <option value="price-asc">Harga termurah</option>
+          <option value="price-desc">Harga termahal</option>
+          <option value="rating-desc">Rating tertinggi</option>
+          <option value="name-asc">Nama A–Z</option>
+        </select>
+        <button class="button hide-sm" id="reset">Reset</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="wrap">
+      <div id="grid" class="grid" aria-live="polite"></div>
+
+      <footer>
+        <p><strong>Disclaimer:</strong> Halaman ini berisi tautan affiliate Shopee. Jika Anda membeli melalui tautan tersebut, pemilik situs dapat menerima komisi tanpa biaya tambahan bagi Anda.</p>
+        <p>© <span id="year"></span> Brand Anda. Semua merek dagang adalah milik pihak masing-masing.</p>
+      </footer>
+    </div>
+  </main>
+
+  <script>
+    // ==============================
+    // 1) DATA PRODUK — EDIT BAGIAN INI
+    // ------------------------------
+    // Cara menambah produk:
+    //  - Duplikasi objek di dalam array PRODUCTS.
+    //  - Ganti name, price (angka tanpa titik), image (URL gambar), category, rating, desc, dan url (link affiliate Shopee).
+    //  - Pastikan url adalah link affiliate (contoh: https://shope.ee/XXXX). Link automatis akan diberi atribut rel="nofollow sponsored".
+
+    const PRODUCTS = [
+      {
+        id: 'p1',
+        name: 'Tripod HP Meja Mini',
+        price: 25999,
+        image: 'https://via.placeholder.com/800x800.png?text=Tripod+Mini',
+        category: 'Gadget',
+        rating: 4.7,
+        desc: 'Tripod kecil ringkas untuk konten & video call.',
+        url: 'https://shope.ee/xxxxxxxx'
+      },
+      {
+        id: 'p2',
+        name: 'Tumbler Stainless 500ml',
+        price: 39999,
+        image: 'https://via.placeholder.com/800x800.png?text=Tumbler',
+        category: 'Home & Living',
+        rating: 4.8,
+        desc: 'Tahan panas/dingin, aman untuk harian.',
+        url: 'https://shope.ee/yyyyyyyy'
+      },
+      {
+        id: 'p3',
+        name: 'Lampu LED Strip 5m',
+        price: 54999,
+        image: 'https://via.placeholder.com/800x800.png?text=LED+Strip',
+        category: 'Elektronik',
+        rating: 4.6,
+        desc: 'RGB dekorasi kamar, dilengkapi remote.',
+        url: 'https://shope.ee/zzzzzzzz'
+      },
+      {
+        id: 'p4',
+        name: 'Serum Niacinamide 10%',
+        price: 48999,
+        image: 'https://via.placeholder.com/800x800.png?text=Serum+Niacinamide',
+        category: 'Kecantikan',
+        rating: 4.9,
+        desc: 'Bantu cerahkan dan meratakan warna kulit.',
+        url: 'https://shope.ee/aaaaaaa'
+      },
+      {
+        id: 'p5',
+        name: 'Kaos Oversize Unisex',
+        price: 79999,
+        image: 'https://via.placeholder.com/800x800.png?text=Kaos+Oversize',
+        category: 'Fashion',
+        rating: 4.5,
+        desc: 'Bahan adem, potongan loose fit.',
+        url: 'https://shope.ee/bbbbbbb'
+      },
+      {
+        id: 'p6',
+        name: 'Headset Gaming RGB',
+        price: 159999,
+        image: 'https://via.placeholder.com/800x800.png?text=Headset+Gaming',
+        category: 'Gadget',
+        rating: 4.7,
+        desc: 'Suara mantap, mic jernih untuk komunikasi.',
+        url: 'https://shope.ee/ccccccc'
+      },
+      {
+        id: 'p7',
+        name: 'Panci Serbaguna 20cm',
+        price: 89999,
+        image: 'https://via.placeholder.com/800x800.png?text=Panci+Serbaguna',
+        category: 'Home & Living',
+        rating: 4.6,
+        desc: 'Cocok untuk masak mie, sup, dan tumis.',
+        url: 'https://shope.ee/ddddddd'
+      },
+      {
+        id: 'p8',
+        name: 'Powerbank 10.000 mAh',
+        price: 129999,
+        image: 'https://via.placeholder.com/800x800.png?text=Powerbank+10000',
+        category: 'Elektronik',
+        rating: 4.8,
+        desc: 'Fast charge, desain tipis gampang dibawa.',
+        url: 'https://shope.ee/eeeeeee'
+      }
+    ];
+
+    // ==============================
+    // 2) UTIL & RENDER LOGIC
+    // ------------------------------
+    const fmtIDR = n => new Intl.NumberFormat('id-ID', { style:'currency', currency:'IDR', maximumFractionDigits:0 }).format(n);
+
+    // Tambah UTM opsional agar mudah tracking di analytics (tidak wajib).
+    const addUTM = (url) => {
+      const hasQuery = url.includes('?');
+      const utm = 'utm_source=website&utm_medium=affiliate&utm_campaign=shopee';
+      return url + (hasQuery ? '&' : '?') + utm;
+    };
+
+    const getCategories = () => {
+      const s = new Set(PRODUCTS.map(p => p.category));
+      return Array.from(s).sort((a,b)=>a.localeCompare(b));
+    };
+
+    const el = sel => document.querySelector(sel);
+
+    const state = {
+      q: '',
+      cat: '',
+      sort: 'popular'
+    };
+
+    const bySort = {
+      'popular': (a,b) => (b.rating ?? 0) - (a.rating ?? 0),
+      'price-asc': (a,b) => a.price - b.price,
+      'price-desc': (a,b) => b.price - a.price,
+      'rating-desc': (a,b) => (b.rating ?? 0) - (a.rating ?? 0),
+      'name-asc': (a,b) => a.name.localeCompare(b.name)
+    };
+
+    function renderFilters(){
+      const catSel = el('#cat');
+      const cats = getCategories();
+      catSel.innerHTML = '<option value="">Semua Kategori</option>' + cats.map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');
+    }
+
+    function escapeHtml(str){
+      return String(str).replace(/[&<>"]g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[s]));
+    }
+
+    function productCard(p){
+      const price = fmtIDR(p.price);
+      const rating = (p.rating ?? 0).toFixed(1);
+      const link = addUTM(p.url);
+      const safeName = escapeHtml(p.name);
+      const safeDesc = escapeHtml(p.desc ?? '');
+      const safeCat  = escapeHtml(p.category ?? '');
+      return `
+        <article class="card" data-id="${p.id}" data-cat="${safeCat}">
+          <img class="thumb" loading="lazy" src="${p.image}" alt="${safeName}" />
+          <div class="pad">
+            <div class="meta">
+              <div class="price">${price}</div>
+              <div class="badge" title="Rating">★ ${rating}</div>
+            </div>
+            <h2 class="name">${safeName}</h2>
+            <p class="desc">${safeDesc}</p>
+            <div class="cta">
+              <a class="primary" href="${link}" target="_blank" rel="nofollow sponsored noopener noreferrer" aria-label="Beli ${safeName} di Shopee">Beli di Shopee</a>
+              <button data-copy="${link}" title="Salin link">Salin</button>
+            </div>
+          </div>
+        </article>`;
+    }
+
+    function render(){
+      const q = state.q.trim().toLowerCase();
+      const cat = state.cat;
+      const sorted = [...PRODUCTS]
+        .filter(p => (!cat || p.category === cat))
+        .filter(p => !q || (p.name.toLowerCase().includes(q) || (p.desc ?? '').toLowerCase().includes(q)))
+        .sort(bySort[state.sort] ?? bySort['popular']);
+
+      const grid = el('#grid');
+      grid.innerHTML = sorted.map(productCard).join('') || '<p>Tidak ada produk yang cocok.</p>';
+
+      // tombol salin
+      grid.querySelectorAll('button[data-copy]').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          try{ await navigator.clipboard.writeText(btn.getAttribute('data-copy')); btn.textContent='Tersalin'; setTimeout(()=>btn.textContent='Salin',1500);}catch(e){ alert('Gagal menyalin link'); }
+        })
+      })
+    }
+
+    // ==============================
+    // 3) BOOTSTRAP
+    // ------------------------------
+    document.addEventListener('DOMContentLoaded', () => {
+      renderFilters();
+      render();
+
+      el('#q').addEventListener('input', e => { state.q = e.target.value; render(); });
+      el('#cat').addEventListener('change', e => { state.cat = e.target.value; render(); });
+      el('#sort').addEventListener('change', e => { state.sort = e.target.value; render(); });
+      el('#reset').addEventListener('click', () => {
+        state.q=''; state.cat=''; state.sort='popular';
+        el('#q').value=''; el('#cat').value=''; el('#sort').value='popular';
+        render();
+      });
+
+      document.getElementById('year').textContent = new Date().getFullYear();
+    });
+  </script>
+</body>
+</html>
